@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>1000 Coins Received!</title>
+
+<style>
+  :root{
+    --bg:#050505;
+    --fg:#ffffff;
+    --silver:#A0A0A0;
+    --silver-dim:#5a5a5a;
+    --wp:#25D366;
+    --yellow:#F8D849;
+    --gold:#FFD700;
+    --green-money:#85bb65;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Courier New', 'Segoe UI', monospace, sans-serif;
+    overflow-x: hidden;
+  }
+  body{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    width:100vw;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    gap:14px;
+    position: relative;
+  }
+
+  /* Contenedor de las animaciones (Monedas y Billetes) */
+  #jackpot-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; /* Para no bloquear los clics en los anuncios */
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .panel{
+    width:100%;
+    max-width:380px;
+    background: linear-gradient(180deg, #111 0%, #000 100%);
+    border: 2px solid #332800;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+    border-radius:12px;
+    padding:20px 16px;
+    z-index: 10;
+    position: relative;
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(15px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  @keyframes pulseGold {
+    0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+    50% { text-shadow: 0 0 25px rgba(255, 215, 0, 0.9); }
+  }
+
+  #resultState{ display:flex; flex-direction:column; gap:14px; animation:fadeIn .6s ease; text-align: center; }
+  
+  .result-title{ 
+    font-size:26px; 
+    font-weight: 900;
+    color:var(--gold); 
+    letter-spacing:1px; 
+    text-transform:uppercase; 
+    animation: pulseGold 2s infinite;
+    line-height: 1.1;
+  }
+  
+  .subtitle {
+    font-size: 13px;
+    color: var(--silver);
+    margin-bottom: 5px;
+  }
+
+  .receipt-card{
+    border:1px dashed var(--gold); 
+    border-radius:8px; 
+    padding:14px; 
+    display:flex;
+    flex-direction: column;
+    align-items:center; 
+    justify-content:center; 
+    gap:6px; 
+    background:rgba(255, 215, 0, 0.05); 
+    animation:fadeIn .8s ease;
+  }
+  .receipt-card .label{ font-size:12px; color:var(--silver); text-transform:uppercase; letter-spacing:1px; }
+  .receipt-card .value{ font-size:24px; font-weight:800; letter-spacing:2px; color:var(--fg); }
+  .receipt-card .status{ color: #3ddc6a; font-weight: bold; font-size: 14px; margin-top: 5px; text-transform: uppercase;}
+
+  .wa-btn{
+    display:flex; align-items:center; justify-content:center; gap:10px; background:var(--wp);
+    color:#ffffff; border:none; padding:15px; border-radius:8px; font-weight:800; font-size:14px;
+    letter-spacing:.5px; cursor:pointer; text-decoration:none; transition:transform .15s ease, filter .2s ease;
+    text-transform: uppercase;
+  }
+  .wa-btn:hover{ filter:brightness(1.1); transform:translateY(-2px); }
+  .wa-btn svg{ width:22px; height:22px; flex-shrink:0; }
+
+  /* ===== PARTÍCULAS (Monedas y Billetes) ===== */
+  .particle {
+    position: absolute;
+    top: -10vh;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .coin {
+    width: 25px; height: 25px;
+    background: radial-gradient(circle, #ffe066 0%, #d4af37 100%);
+    border-radius: 50%;
+    border: 2px solid #b8860b;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5), inset 0 0 5px rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: #fff; font-size: 12px; text-shadow: 1px 1px 1px #000;
+  }
+  .coin::after { content: 'C'; }
+
+  .bill {
+    width: 40px; height: 20px;
+    background: var(--green-money);
+    border: 1px solid #385e0f;
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: #1a3c00; font-size: 10px;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.4);
+    animation-name: fall, spin;
+  }
+  .bill::after { content: '100$'; }
+
+  @keyframes fall {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(110vh) scale(0.8); opacity: 0; }
+  }
+  @keyframes spin {
+    0% { transform: rotateY(0deg) rotateX(0deg); }
+    100% { transform: rotateY(360deg) rotateX(360deg); }
+  }
+
+  /* Adsterra: Ajustes de Anuncios */
+  .ad-slot-small{
+    margin-top:10px; margin-bottom:6px; width:320px; min-height:50px; height:auto; max-width:100%;
+    background:#0a0a0a; border:1px dashed var(--silver-dim); border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    margin-left:auto; margin-right:auto; position:relative; z-index: 10;
+  }
+  .ad-slot-small iframe, .ad-slot-big iframe { max-width: 100% !important; display: block !important; }
+  .ad-slot-big {
+    margin-top:10px; margin-bottom: 10px; width:300px; height:250px; background:#0a0a0a;
+    border:1px solid #1f1f1f; border-radius:12px; margin-left:auto; margin-right:auto;
+    position: relative; overflow:hidden; z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Contenedor donde lloverán las monedas y billetes -->
+  <div id="jackpot-container"></div>
+
+  <!-- ===== ANUNCIO 1 (arriba) ===== -->
+  <div class="ad-slot-small" id="adSlotResult1">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '87b04073200cdd655a562f19119611bb',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="https://cleavegrate.com/87b04073200cdd655a562f19119611bb/invoke.js"></script>
+  </div>
+
+  <div class="panel">
+    <div id="resultState" class="result-box">
+      
+      <p class="subtitle">Transaction Successful</p>
+      <h2 class="result-title">🎉 1000 COINS DELIVERED 🎉</h2>
+
+      <div class="receipt-card">
+        <div class="label">Amount Added to Balance</div>
+        <div class="value">🪙 1,000</div>
+        <div class="status">✔ Confirmed</div>
+      </div>
+
+      <!-- ===== ANUNCIO 2 (medio) ===== -->
+      <div class="ad-slot-big" id="adSlotResult2">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '769d8d3d593ad963692e85dcad6fb33e',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://cleavegrate.com/769d8d3d593ad963692e85dcad6fb33e/invoke.js"></script>
+      </div>
+
+      <p style="font-size: 11px; color: var(--silver); margin-top: 5px;">Your coins are ready to use in the game.</p>
+
+      <a class="wa-btn" id="shareWaBtn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="#ffffff"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.05 3.6c-4.88 0-8.86 3.97-8.86 8.86 0 1.56.42 3.07 1.2 4.39L3.6 21.4a.5.5 0 0 0 .6.62l4.7-1.23a8.84 8.84 0 0 0 4.15 1.05h.01c4.88 0 8.86-3.97 8.86-8.86a8.85 8.85 0 0 0-2.32-5.96zM12.05 20.1h-.01a7.3 7.3 0 0 1-3.73-1.02l-.27-.16-2.78.73.74-2.71-.18-.28a7.3 7.3 0 0 1-1.12-3.9c0-4.04 3.3-7.34 7.36-7.34a7.32 7.32 0 0 1 7.34 7.34c0 4.05-3.3 7.34-7.35 7.34zm4.03-5.5c-.22-.11-1.3-.64-1.5-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.16-.48.05-.22-.1-.93-.34-1.77-1.09-.65-.58-1.09-1.3-1.22-1.52-.13-.22-.01-.34.1-.46.1-.1.22-.27.33-.4.11-.13.15-.22.22-.37.07-.15.04-.27-.02-.38-.06-.11-.6-1.45-.82-1.98-.22-.53-.44-.46-.6-.47-.16-.01-.34-.01-.52-.01-.18 0-.47.07-.71.34-.24.27-.93.91-.93 2.21s.95 2.55 1.08 2.72c.13.18 1.83 2.79 4.43 3.8 2.6 1.01 2.6.67 3.07.62.47-.05 1.5-.61 1.71-1.2.22-.6.22-1.1.15-1.21-.07-.11-.25-.18-.47-.29z"/></svg>
+        INVITE FRIENDS & GET MORE
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== ANUNCIO 3 (abajo) ===== -->
+  <div class="ad-slot-small" id="adSlotResult3">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '87b04073200cdd655a562f19119611bb',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="https://cleavegrate.com/87b04073200cdd655a562f19119611bb/invoke.js"></script>
+  </div>
+
+<script>
+  // ===== LÓGICA DE LA LLUVIA DE MONEDAS Y BILLETES =====
+  const container = document.getElementById('jackpot-container');
+  const totalParticles = 60; // Cantidad de elementos cayendo a la vez
+
+  for (let i = 0; i < totalParticles; i++) {
+    // 60% probabilidad de moneda, 40% billete
+    const isCoin = Math.random() > 0.4;
+    const el = document.createElement('div');
+    el.classList.add('particle');
+    el.classList.add(isCoin ? 'coin' : 'bill');
+    
+    // Posición horizontal aleatoria (0% a 100%)
+    const left = Math.random() * 100;
+    // Retraso aleatorio para que no caigan todos al mismo tiempo
+    const delay = Math.random() * 5;
+    // Duración de la caída aleatoria (3 a 7 segundos)
+    const duration = 3 + Math.random() * 4;
+    
+    el.style.left = `${left}%`;
+    el.style.animationDelay = `${delay}s`;
+    el.style.animationDuration = `${duration}s`;
+    
+    container.appendChild(el);
+  }
+
+  // ===== BOTÓN WHATSAPP =====
+  const GAME_LINK = "https://tudominio.com/"; // <-- Pon aquí el enlace a tu index.html
+  const waBtn = document.getElementById('shareWaBtn');
+  const waMessage = `¡Acabo de conseguir 1000 COINS GRATIS! 💰 Entra aquí y reclama las tuyas antes de que se acaben: ${GAME_LINK}`;
+  waBtn.href = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
+</script>
+
+<!-- Social Bar -->
+<script src="https://cleavegrate.com/99/eb/0b/99eb0b70935151c2bf675800e9484811.js"></script>
+
+</body>
+</html>
