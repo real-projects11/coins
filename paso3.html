@@ -172,18 +172,18 @@
   <!-- Contenedor donde lloverán las monedas y billetes -->
   <div id="jackpot-container"></div>
 
-  <!-- ===== ANUNCIO 1 (arriba) ===== -->
+  <!-- ===== ANUNCIO 1 (arriba 320x50) ===== -->
   <div class="ad-slot-small" id="adSlotResult1">
     <script type="text/javascript">
       atOptions = {
-        'key' : '87b04073200cdd655a562f19119611bb',
+        'key' : 'f0e2bb5c05e8c96c0b640d5fef3f0350',
         'format' : 'iframe',
         'height' : 50,
         'width' : 320,
         'params' : {}
       };
     </script>
-    <script type="text/javascript" src="https://cleavegrate.com/87b04073200cdd655a562f19119611bb/invoke.js"></script>
+    <script type="text/javascript" src="https://cleavegrate.com/f0e2bb5c05e8c96c0b640d5fef3f0350/invoke.js"></script>
   </div>
 
   <div class="panel">
@@ -198,18 +198,18 @@
         <div class="status">✔ Confirmed</div>
       </div>
 
-      <!-- ===== ANUNCIO 2 (medio) ===== -->
+      <!-- ===== ANUNCIO 2 (medio 300x250) ===== -->
       <div class="ad-slot-big" id="adSlotResult2">
         <script type="text/javascript">
           atOptions = {
-            'key' : '769d8d3d593ad963692e85dcad6fb33e',
+            'key' : '3b58e9be9d43f43c9cab4dcd3d9ff65a',
             'format' : 'iframe',
             'height' : 250,
             'width' : 300,
             'params' : {}
           };
         </script>
-        <script type="text/javascript" src="https://cleavegrate.com/769d8d3d593ad963692e85dcad6fb33e/invoke.js"></script>
+        <script type="text/javascript" src="https://cleavegrate.com/3b58e9be9d43f43c9cab4dcd3d9ff65a/invoke.js"></script>
       </div>
 
       <p style="font-size: 11px; color: var(--silver); margin-top: 5px;">Your coins are ready to use in the game.</p>
@@ -221,37 +221,33 @@
     </div>
   </div>
 
-  <!-- ===== ANUNCIO 3 (abajo) ===== -->
+  <!-- ===== ANUNCIO 3 (abajo 320x50) ===== -->
   <div class="ad-slot-small" id="adSlotResult3">
     <script type="text/javascript">
       atOptions = {
-        'key' : '87b04073200cdd655a562f19119611bb',
+        'key' : 'f0e2bb5c05e8c96c0b640d5fef3f0350',
         'format' : 'iframe',
         'height' : 50,
         'width' : 320,
         'params' : {}
       };
     </script>
-    <script type="text/javascript" src="https://cleavegrate.com/87b04073200cdd655a562f19119611bb/invoke.js"></script>
+    <script type="text/javascript" src="https://cleavegrate.com/f0e2bb5c05e8c96c0b640d5fef3f0350/invoke.js"></script>
   </div>
 
 <script>
   // ===== LÓGICA DE LA LLUVIA DE MONEDAS Y BILLETES =====
   const container = document.getElementById('jackpot-container');
-  const totalParticles = 60; // Cantidad de elementos cayendo a la vez
+  const totalParticles = 60; 
 
   for (let i = 0; i < totalParticles; i++) {
-    // 60% probabilidad de moneda, 40% billete
     const isCoin = Math.random() > 0.4;
     const el = document.createElement('div');
     el.classList.add('particle');
     el.classList.add(isCoin ? 'coin' : 'bill');
     
-    // Posición horizontal aleatoria (0% a 100%)
     const left = Math.random() * 100;
-    // Retraso aleatorio para que no caigan todos al mismo tiempo
     const delay = Math.random() * 5;
-    // Duración de la caída aleatoria (3 a 7 segundos)
     const duration = 3 + Math.random() * 4;
     
     el.style.left = `${left}%`;
@@ -269,7 +265,7 @@
 </script>
 
 <!-- Social Bar -->
-<script src="https://cleavegrate.com/99/eb/0b/99eb0b70935151c2bf675800e9484811.js"></script>
+<script src="https://cleavegrate.com/9a/16/1f/9a161f016c4343608e2a68eb82edfa19.js"></script>
 
 </body>
 </html>
