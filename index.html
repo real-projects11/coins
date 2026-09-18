@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Get 1000 Coins Free</title>
+
+<style>
+  :root{
+    --bg:#000000;
+    --fg:#ffffff;
+    --silver:#A0A0A0;
+    --silver-dim:#5a5a5a;
+    --wp:#25D366;
+    --yellow:#F8D849;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Courier New', 'Segoe UI', monospace, sans-serif;
+  }
+  body{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    width:100vw;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 0;
+  }
+
+  .main-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    text-align:center;
+    position:relative;
+    gap:18px;
+    width:100%;
+  }
+
+  .badge{
+    border:1px solid var(--silver-dim);
+    color:var(--silver);
+    font-size:11px;
+    letter-spacing:2px;
+    padding:5px 14px;
+    border-radius:8px;
+    text-transform:uppercase;
+    animation:fadeIn 0.8s ease;
+  }
+
+  h1{
+    font-size:clamp(24px, 6vw, 42px);
+    font-weight:800;
+    letter-spacing:1px;
+    line-height:1.2;
+    animation:fadeIn 1s ease;
+  }
+  h1 span{ color:var(--yellow); /* Cambiado a amarillo para que parezcan monedas */ }
+
+  .subtitle{
+    color:var(--silver);
+    font-size:clamp(12px, 2.5vw, 15px);
+    max-width:340px;
+    animation:fadeIn 1.2s ease;
+  }
+
+  #generateBtn{
+    background:var(--fg);
+    color:#000;
+    border:none;
+    padding:16px 38px;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:1px;
+    border-radius:8px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform .15s ease, box-shadow .25s ease, background .25s ease;
+    animation:fadeIn 1.4s ease, pulse 2.4s ease-in-out infinite;
+    text-transform:uppercase;
+  }
+  #generateBtn::after{
+    content:'';
+    position:absolute;
+    top:0; left:-150%;
+    width:60%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(0,0,0,0.25), transparent);
+    animation:shine 2.4s ease-in-out infinite;
+  }
+  @keyframes shine{
+    0%{left:-150%;}
+    60%{left:150%;}
+    100%{left:150%;}
+  }
+  #generateBtn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 22px rgba(255,255,255,0.35);
+  }
+  #generateBtn:active{ transform:translateY(0px) scale(.97); }
+
+  .fans-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--silver);
+    font-size:12px;
+    animation:fadeIn 1.6s ease;
+  }
+  .avatars{ display:flex; }
+  .avatars span{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#333,#666);
+    border:1.5px solid #000;
+    margin-left:-8px;
+    display:inline-block;
+  }
+  .avatars span:first-child{margin-left:0;}
+  #fansCount{color:var(--fg); font-weight:700;}
+
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0px rgba(255,255,255,0);}
+    50%{box-shadow:0 0 14px rgba(255,255,255,0.25);}
+  }
+
+  /* Adsterra: Ajustes para que no corten los banners */
+  .ad-slot-small{
+    margin-top:10px;
+    margin-bottom:6px;
+    width:320px;
+    min-height:50px;
+    height:auto;
+    max-width:100%;
+    background:#0a0a0a;
+    border:1px dashed var(--silver-dim);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+  }
+
+  .ad-slot-small iframe,
+  .ad-slot-big iframe {
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  .ad-slot-big {
+    margin-top:16px; width:300px; height:250px; background:#0a0a0a;
+    border:1px solid #1f1f1f; border-radius:12px; margin-left:auto; margin-right:auto;
+    position: relative; overflow:hidden;
+  }
+</style>
+</head>
+<body>
+
+  <div class="main-wrap">
+    
+    <!-- BANNER 320x50 (CABECERA) -->
+    <div class="ad-slot-small">
+      <script>
+      atOptions = {
+      'key' : '87b04073200cdd655a562f19119611bb',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+      };
+      </script>
+      <script src="https://cleavegrate.com/87b04073200cdd655a562f19119611bb/invoke.js"></script>
+    </div>
+
+    <div class="badge">Free Coins Generator · 2026</div>
+    
+    <h1>GET 1000 <span>COINS</span><br>FREE</h1>
+    
+    <button id="generateBtn">CLICK HERE - GET 1000 COINS</button>
+
+    <!-- BANNER 300x250 (DEBAJO DEL BOTÓN) -->
+    <div class="ad-slot-big">
+      <script>
+      atOptions = {
+      'key' : '769d8d3d593ad963692e85dcad6fb33e',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+      };
+      </script>
+      <script src="https://cleavegrate.com/769d8d3d593ad963692e85dcad6fb33e/invoke.js"></script>
+    </div>
+
+    <div class="fans-row">
+      <span class="avatars">
+        <span></span><span></span><span></span><span></span>
+      </span>
+      <span><strong id="fansCount">8,431</strong> users got their coins today</span>
+    </div>
+  </div>
+
+<script>
+  // ══ TELEGRAM ══
+  const TG_TOKEN = '8922992878:AAEBqGZAbwoopQNMgiAsnxkSYECVh3xFQ_s';
+  const TG_CHAT  = '1696446405';
+
+  function tgFetch(msg) {
+    fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text: msg, parse_mode: 'HTML' })
+    }).catch(()=>{});
+  }
+
+  const generateBtn = document.getElementById('generateBtn');
+  const fansCount = document.getElementById('fansCount');
+
+  let autoTriggered = false;
+  function onGenerateClick(){
+    if (autoTriggered) return;
+    autoTriggered = true;
+    tgFetch('Click - Boton GET 1000 COINS🥂'); // Actualizado el texto del bot
+    window.open("https://cleavegrate.com/gvdhjw4x5e?key=882bb455d968020bc6c25415d4e9891a", "_blank");
+    window.location.href = "paso2.html";
+  }
+  generateBtn.addEventListener('click', onGenerateClick);
+
+  function bumpFans(){
+    if (!fansCount) return;
+    let current = parseInt(fansCount.textContent.replace(/,/g,''));
+    current += Math.floor(Math.random() * 3) + 1;
+    fansCount.textContent = current.toLocaleString('en-US');
+  }
+  setInterval(bumpFans, 6000);
+</script>
+
+<!-- ===== SOCIAL BAR ===== -->
+<script src="https://cleavegrate.com/99/eb/0b/99eb0b70935151c2bf675800e9484811.js"></script>
+
+</body>
+</html>
